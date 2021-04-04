@@ -15,7 +15,7 @@ const MenuRoute = require('./routes/menu')
 const UserRoute = require('./routes/user')
 
 
-const PORT = process.env.APP_PORT || 3000
+const PORT = process.env.PORT || 8080
 
 const app = express()
 
@@ -41,12 +41,16 @@ app.use(UserRoute)
 
 async function start() {
   try {
-    await mongoose.connect(`${process.env.DATABASE_URL}`, { useFindAndModify: false })
+    await mongoose.connect(`${process.env.MONGODB_URI}`, { 
+      useFindAndModify: false, 
+      useUnifiedTopology: true,
+      useNewUrlParser: true
+    })
+
 
     // start server
     app.listen(PORT, () => {
-      console.log('Server has been started...')
-      console.log(process.env.DATABASE_URL);
+      console.log(`Server has been started on PORT: ${PORT}`)
       console.log(PORT);
     })
   } catch(e) {
